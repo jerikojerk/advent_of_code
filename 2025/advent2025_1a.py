@@ -27,9 +27,9 @@ with open(INI_FILE, "r") as f:
     
         instruction_counter+=1
         rotation=int(string[1:])
-        
+
         if  rotation > INI_DIAL_POSITION :
-            print("multiple tours")
+            print("multiple")
         gain=rotation//INI_DIAL_POSITION
         rotation=rotation%INI_DIAL_POSITION
         
