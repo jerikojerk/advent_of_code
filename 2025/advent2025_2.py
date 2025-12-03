@@ -1,60 +1,80 @@
 #untested code .
 from math import ceil 
 from math import log10 
+
+
 import re 
 
 INI_FILE="2025/advent2025_2-input.txt"
+def is_odd(x): return x % 2 == 1
+
+def rangeBoundary_spliter( rangeBoundary:str ):
+    length=len(rangeBoundary)
+    firsthalf = length//2 
+    if firsthalf == 0:
+        print(f"strange boundary {rangeBoundary}")
+        return ( "1",rangeBoundary,1)
+    secondhalf=length-firsthalf
+    return ( rangeBoundary[:firsthalf], 
+        rangeBoundary[-secondhalf:],secondhalf)
 
 def range_analysis( range:str ):
-   results=() 
-   (bottom,top) = range.split("-",2)
-   bo = int(bottom)
-   to = int(top)
+    pattern = re.compile(r"^([0-9]+)\1$") 
+    results=[]
+    (bottom,top) = range.split("-",2)
+    bo = int(bottom)
+    to = int(top)
     if  bo > to :
         raise ValueError(f"Please verify  {range=} {bo=} > {to=}")
     
-   (bleft,bright,bexp)=rangeBoundary_spliter(bottom,False)
-   (tleft,tright,texp)=rangeBoundary_spliter(top,True)
+    (bleft,bright,bexp)=rangeBoundary_spliter(bottom)
+    #(tleft,tright,texp)=rangeBoundary_spliter(top)
+    iterator = int(bleft)
+    exposant = bexp 
+    max_exp = 10**exposant
+    min_exp = 10**(exposant-1)
+    print(f"iterator initialisation {min_exp=} {max_exp} {iterator}")
+    while( True  ):
+        candidat = iterator*10**exposant + iterator 
+        #print(f"{candidat=}")
+        if  to < candidat : 
+            break
+       
+        if bo <= candidat:
+            s = str(candidat)
+            if pattern.findall(s):
+                #print(f"success {candidat=} ")
+                results.append(candidat)
+            else:
+                print(f"last minute : erreur {s}")
+        #else candidat trop petit 
 
-    if bexp > texp :
-        raise ValueError(f" exposant non conforme {bexp=} {texp=} {range=} ")
-   continuez=True 
-   iterator = bleft 
-   end = tleft 
-   pattern = re.compile(r"([0-9]+)\1") 
-   
-   while( continuez  ):        
-        candidat = iterator*10**bexp + iterator 
-        if  bo > iterator :
-            continue 
-        if  to < iterator : 
-            continuez = False
         iterator+=1
-        
-        s = str(candidat)
-        if pattern.fullmatch(s):
-            results.append(s)
-        else:
-            print(f"coucou, last minute : erreur {s}"
+        """
+        if   iterator >= max_exp or iterator < min_exp :
+            print(f"{candidat=}")
+            tmp = f"{min_exp=} {max_exp=} {iterator=}"
+            #there is a rule for no leading 0 
+            iterator=10**(exposant)
+            min_exp=max_exp
+            exposant+=1
+            max_exp = 10**exposant
+            print(f"iterator adjustment {tmp} => {min_exp=} {max_exp=} {iterator=}")
+        """
     #endwhile    
-    
-   return results
+    return results
 
-def rangeBoundary_spliter( rangeBoundary:str, isUpper:bool ):
-    length=len(rangeBoundary)
-    firsthalf = lenght//2 
-    if ( 2*firsthalf<lenght):
-        if isUpper:
-            secondhalf=firsthalf
-            firsthalf=length-secondhalf
-        else:
-            secondhalf=length-firsthalf
-    else
-        secondhalf= firsthalf
-    return ( int(rangeBoundary[:firsthalf]), int(rangeBoundary[-secondhalf:]),secondhalf)
+
 
 with open(INI_FILE, "r") as input:
-  for lines in input:
-      my_ranges= lines.split(',')
-      for my_range in my_ranges:
-        range_analysis( my_range ) 
+    for lines in input:
+        my_ranges= lines.split(',')
+        accumul = []
+        for my_range in my_ranges:
+            print(f"**** {my_range} ****")
+            results = range_analysis( my_range ) 
+            print("ID :",results)
+            tmp = sum( results )
+            accumul.append( tmp )
+    tmp = sum(accumul)
+    print(f"somme des id du lutin: {tmp}")
