@@ -1,19 +1,18 @@
 from pprint import pprint
 import re
-from debug import debug_open
+
 
 INI_FILE="2015\\advent2015_day9-input.txt"
 
-debug_open(INI_FILE )
+#debug_open( INI_FILE )
 total_encoded=0
 total_code=0
-
-
 
 city_src='(?P<src>\\w+)'
 city_dst='(?P<dst>\\w+)'
 distance='(?P<dist>\\d+)'
 regex=re.compile(rf"{city_src}\s+to\s+{city_dst}\s+=\s+{distance}")
+
 
 def init_graph( graf:dict, src, dst, dist ):
     tmp= int(dist)
@@ -39,7 +38,7 @@ def generate_travel ( dist_graph:dict, cities_available:list ,  record_dist:int)
     return (record_dist, best_travel)
 
 
-def generate_city_next(  dist_graph:dict,cache:dict,cities_visited:list, cities_available:list,  record_dist:int, current_dist:int):
+def generate_city_next(  dist_graph:dict, cache:dict, cities_visited:list, cities_available:list,  record_dist:int, current_dist:int):
     best_travel=None 
     current_city =  cities_visited[-1]
     #first_city=cities_visited[1]
@@ -57,18 +56,15 @@ def generate_city_next(  dist_graph:dict,cache:dict,cities_visited:list, cities_
             if count>0:  #verifier  la condition d'arret 
                 travel = cities_visited.copy()
                 travel.append(next_city)
-                (full_dist, full_travel) = generate_city_next(dist_graph,cache, travel, cities, record_dist, new_dist )
+                (full_dist, full_travel) = generate_city_next(dist_graph, cache, travel, cities, record_dist, new_dist )
                 if ( full_dist < record_dist ) :
                     record_dist=full_dist
                     best_travel = full_travel
                     print(f" changing {full_dist=} {record_dist=}")
                     pprint(  full_travel)
-            
-
+            else:
+                return ( , )
     return (record_dist, best_travel)
-
-
-
 
 
 
@@ -84,18 +80,18 @@ with open(INI_FILE, "r") as f:
             continue
 
         capture=match.groupdict()
-        horizon+=init_graph(graph,capture['src'],capture['dst'],capture['dist'])
-        horizon+=init_graph(graph,capture['dst'],capture['src'],capture['dist'])
+        horizon+=init_graph(graph, capture['src'], capture['dst'], capture['dist'])
+        horizon+=init_graph(graph, capture['dst'], capture['src'], capture['dist'])
 
     pprint( graph )
     keys = graph.keys()
     visit=[]
     cities =list(graph.keys())
 
-    (distance, travel)=generate_travel( graph , cities,horizon )
+    (distance, travel)=generate_travel( graph, cities, horizon )
         
     print(f"{distance=}")
-    pprint(travel )
+    pprint( travel )
 
         
 
