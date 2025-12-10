@@ -20,16 +20,24 @@ class IntervalNode:
     def insert( self, node:IntervalNode ):
         if node.start < self.start :
             #aller à gauche
-            if self.left is None :
+            if node.start <= self.start and self.start <= node.end :
+                print(f"fusion de node à gauche ! ")
+                self.start = node.start 
+                self.end = max(node.end,self.end)
+            elif self.left is None :
                 self.left = node 
-                self.left.height = self.height+1
+                #self.left.height = self.height+1
             else:
                 self.left.insert(node)
         else: 
             #aller à droite.
-            if self.right is None:
+            #fusion de node
+            if  self.start <= node.start and node.start <= self.end :
+                print(f"fusion de node à droite ! ")
+                self.end = max(node.end,self.end)
+            elif self.right is None:
                 self.right = node 
-                self.right.height = self.height+1
+                #self.right.height = self.height+1
             else: 
                 self.right.insert(node)
         self.end_max=max( self.end_max, node.end_max)
