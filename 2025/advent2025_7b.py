@@ -13,7 +13,7 @@ def find_the_source(tr):
     raise ValueError("missing S mark")
 
 
-
+#this is a total rewrite of the function as i'm not the happy owner of a supercomputer
 def compute2(table):
     start = find_the_source(table[0])
     nb_col=len(table[0])
@@ -59,14 +59,29 @@ def print_screen2(table):
                 buf = buf + f"{tmp}"
             elif tmp < 100 :
                 buf =buf +"a"
-            elif tmp < 500 :
-                buf = buf +"b"
             elif tmp < 1000 :
+                buf = buf +"b"
+            elif tmp < 10000 :
                 buf = buf + "c"
-            elif tmp < 2000 :
+            elif tmp < 100000 :
                 buf = buf + "d"
+            elif tmp < 1000000 :
+                buf = buf + "e"
+            elif tmp < 10000000 :
+                buf = buf + "f"
+            elif tmp < 100000000 :
+                buf = buf + "g"
+            elif tmp < 1000000000 :
+                buf = buf + "h"
+            elif tmp < 10000000000 :
+                buf = buf + "i"
+            elif tmp < 100000000000 :
+                buf = buf + "j"
+            elif tmp < 1000000000000 :
+                buf = buf + "k"
             else :
-                buf = buf + "E"
+                buf = buf + "#"
+        print(buf)
             
 
 
@@ -81,5 +96,5 @@ with open(INI_FILE, "r") as input:
 #with
 print_screen2(table2)
 r= compute2( table2)
-
+print_screen2(table2)
 print( f"timelines = {r}")

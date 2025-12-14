@@ -1,9 +1,6 @@
 INI_FILE="2025/advent2025_7-ex.txt"
 INI_FILE="2025/advent2025_7-input.txt"
 
-
-
-
 def find_the_source(tr):
     print( f"****{tr}****"  )
     print (f"{len(tr)=}")
@@ -12,6 +9,8 @@ def find_the_source(tr):
             return pos 
     raise ValueError("missing S mark")
 
+
+#ray tracing solution.
 def compute1(table):
     start = find_the_source(table[0])
     nb_col=len(table[0])
@@ -24,6 +23,7 @@ def compute1(table):
             tmp = table[r][col]
             if tmp == ".":
                 table[r][col]="|"
+            # this solution is only possible because this pruning (that also motivated by finding only 21 splits)
             elif tmp == "|":
                 break
             elif tmp == "^":
@@ -42,31 +42,6 @@ def compute1(table):
     #while
     return splits
 
-
-def compute2(table):
-    start = find_the_source(table[0])
-    nb_col=len(table[0])
-    nb_row=len(table)
-    table[1][start]=1
-
-    for r in range( 1, nb_row-1):
-        next = r+1
-        print (f"{r=}")
-        for c in range(0, nb_col ):
-            val = table[r][c]
-            
-            if isinstance(val,int): 
-                tmp = table[next][c]
-                if isinstance(tmp,int):
-                    table[next][col]=val+table[next][col]
-                elif tmp == "^":
-                    buf=col-1
-                    if buf >= 0:
-                        table[next][buf]=val+table[next][buf]
-                    buf=col+1
-                    if buf < nb_col:
-                        table[next][buf]=val+table[next][buf]
-        print( table[next])
             
         #pour toutes les colonnes
     #for  toutes les lines (sauf la 1er et la derniere)
